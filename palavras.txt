@@ -1,0 +1,4 @@
+Escrava as palavras abaixo, sem utilizar acentos e numeros:
+palavraum
+palavradois
+palavratres
