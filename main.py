@@ -10,6 +10,7 @@ import atexit
 alfabeto = list(string.ascii_lowercase)
 BotaoAntigo = "Vazio"
 TracoAntigo = "Vazio"
+Acertos = 0
 VidasDoPlayer = 6
 
 def funcao_saida():
@@ -46,18 +47,19 @@ def IniciarJogo():
 
 
     Botoes = {}
-
     def AoApertarBotao(indice2):
         global VidasDoPlayer
         global BotaoAntigo
         global TracoAntigo
+        global Acertos
 
-        print(VidasDoPlayer)
+
         botaoApertado = Botoes[indice2]
         letra = botaoApertado['text']
-
         if letra.lower() in PalavraEscolhida.lower():
             botaoApertado.config(bg="green")
+     
+
         else:
             botaoApertado.config(bg="red")
             if VidasDoPlayer == 6:
@@ -79,19 +81,49 @@ def IniciarJogo():
                 Desenho.create_line(129,162,143, 172, fill="blue")
                 VidasDoPlayer -= 1
                 Janela.destroy()
+
+                def AssimQueFechar():
+                    JanelaVocePerdeu.destroy()
+                    quit()
+
                 JanelaVocePerdeu = tkinter.Tk()
                 JanelaVocePerdeu.geometry("400x200")
                 JanelaVocePerdeu.title("Voce perdeu")
-                sleep(3)
-                JanelaVocePerdeu.destroy()
-                quit()
-
-                
+                LabelPalavra = tkinter.Label(JanelaVocePerdeu, text="A palavra era: " + PalavraEscolhida, font=("Arial", 20, "bold"))
+                LabelVocePerdeu = tkinter.Label(JanelaVocePerdeu, text="Você perdeu!", font=("Arial", 20, "bold"), fg="red")
+                LabelVocePerdeu.pack()
+                LabelPalavra.place(x=25, y=100)
+                JanelaVocePerdeu.mainloop()
 
         for i in range(len(PalavraEscolhida)):
             caractere = PalavraEscolhida[i]
             if caractere.lower() == letra.lower():
                 Labels[i].config(text=letra)
+                Acertos += 1
+                if Acertos == len(PalavraEscolhida):
+                    Janela.destroy()
+                    def alterar_cores(contador=0):
+                        if contador < 1000:
+                            if contador % 2 == 0:
+                                label_voce_ganhou.config(fg="blue")
+                            else:
+                                label_voce_ganhou.config(fg="yellow")
+
+                            janela_voce_ganhou.after(500, alterar_cores, contador + 1)
+                        else:
+                            label_voce_ganhou.config(fg="green")
+
+                    janela_voce_ganhou = tkinter.Tk()
+                    janela_voce_ganhou.geometry("400x100")
+                    janela_voce_ganhou.title("Você ganhou")
+
+                    label_voce_ganhou = tkinter.Label(janela_voce_ganhou, text="Você ganhou!", font=("Arial", 20, "bold"), fg="green")
+                    label_voce_ganhou.pack()
+
+                    janela_voce_ganhou.after(5, alterar_cores)
+                    janela_voce_ganhou.mainloop()
+                    
+
 
             
     
